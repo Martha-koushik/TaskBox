@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskBox - Task Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="mainNav" style="display: none;">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <h2>TaskBox</h2>
+      </div>
+      <button class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+        <li><a href="#" class="nav-link" data-page="dashboard">Dashboard</a></li>
+        <li><a href="#" class="nav-link" data-page="calendar">Calendar</a></li>
+        <li><a href="#" class="nav-link" data-page="profile">Profile</a></li>
+        <li><a href="#" class="nav-link" data-page="settings">Settings</a></li>
+        <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Login Page -->
+  <div class="page auth-page" id="loginPage">
+    <div class="auth-container">
+      <div class="auth-card">
+        <h1>Sign in to TaskBox</h1>
+        <p class="auth-subtitle">Welcome back! Please sign in to continue</p>
+        
+        <form class="auth-form" id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email or Username</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="loginEmail" 
+              placeholder="Enter your email or username"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="loginPassword" 
+              placeholder="Enter your password"
+              required
+            >
+          </div>
+          
+          <div class="error-message" id="loginError"></div>
+          
+          <button type="submit" class="btn btn--primary btn--full-width">Sign in</button>
+        </form>
+        
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="#signup" class="auth-link">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signup Page -->
+  <div class="page auth-page" id="signupPage" style="display: none;">
+    <div class="auth-container">
+      <div class="auth-card">
+        <h1>Sign up for TaskBox</h1>
+        <p class="auth-subtitle">Create your account to get started</p>
+        
+        <form class="auth-form" id="signupForm">
+          <div class="form-group">
+            <label class="form-label" for="signupFullName">Full Name</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="signupFullName" 
+              placeholder="Enter your full name"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email Address</label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="signupEmail" 
+              placeholder="Enter your email"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="signupUsername">Username</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="signupUsername" 
+              placeholder="Choose a username"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Password</label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="signupPassword" 
+              placeholder="Create a password (8-16 characters)"
+              minlength="8"
+              maxlength="16"
+              required
+            >
+            <div class="password-strength">
+              <div class="password-strength-bar"></div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="signupConfirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="signupConfirmPassword" 
+              placeholder="Confirm your password"
+              minlength="8"
+              maxlength="16"
+              required
+            >
+          </div>
+          
+          <div class="error-message" id="signupError"></div>
+          
+          <button type="submit" class="btn btn--primary btn--full-width">Sign up</button>
+        </form>
+        
+        <div class="auth-footer">
+          <p>Already have an account? <a href="#login" class="auth-link">Sign in</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home Page -->
+  <div class="page" id="homePage" style="display: none;">
+    <div class="container page-content">
+      <div class="welcome-section">
+        <h1>Welcome back, <span id="userName">User</span>! 👋</h1>
+        <p class="welcome-subtitle">Here's what's happening with your tasks today</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: var(--color-bg-1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <h3 id="totalTasks">0</h3>
+            <p>Total Tasks</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: var(--color-bg-3);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <h3 id="completedTasks">0</h3>
+            <p>Completed</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background-color: var(--color-bg-2);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-content">
+            <h3 id="pendingTasks">0</h3>
+            <p>Pending</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent-tasks-section">
+        <div class="section-header">
+          <h2>Recent Tasks</h2>
+          <a href="#" class="btn btn--secondary" onclick="Router.navigate('dashboard'); return false;">View All</a>
+        </div>
+        <div class="tasks-list" id="recentTasksList">
+          <!-- Tasks will be loaded here -->
+        </div>
+      </div>
+
+      <div class="quick-add-section">
+        <button class="btn btn--primary" id="quickAddTaskBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add New Task
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Page -->
+  <div class="page" id="dashboardPage" style="display: none;">
+    <div class="container page-content">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <button class="btn btn--primary" id="addTaskBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Task
+        </button>
+      </div>
+
+      <div class="dashboard-controls">
+        <div class="search-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="searchTasks" 
+            placeholder="Search tasks..."
+          >
+        </div>
+
+        <div class="filter-controls">
+          <select class="form-control filter-select" id="filterStatus">
+            <option value="all">All Tasks</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <select class="form-control filter-select" id="sortTasks">
+            <option value="date">Sort by Date</option>
+            <option value="priority">Sort by Priority</option>
+            <option value="status">Sort by Status</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tasks-grid" id="tasksList">
+        <!-- Tasks will be loaded here -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+        </svg>
+        <h3>No tasks found</h3>
+        <p>Start by creating your first task</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar Page -->
+  <div class="page" id="calendarPage" style="display: none;">
+    <div class="container page-content">
+      <h1 style="margin-bottom: var(--space-32);">Calendar</h1>
+      
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button class="btn btn--secondary" id="prevMonth">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <h2 id="currentMonth">October 2025</h2>
+          <button class="btn btn--secondary" id="nextMonth">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Calendar will be loaded here -->
+        </div>
+      </div>
+
+      <div class="calendar-tasks" style="margin-top: var(--space-32);">
+        <h3>Tasks for <span id="selectedDate"></span></h3>
+        <div class="tasks-list" id="calendarTasksList">
+          <!-- Tasks will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Page -->
+  <div class="page" id="profilePage" style="display: none;">
+    <div class="container page-content">
+      <div class="profile-container">
+        <h1 style="margin-bottom: var(--space-32);">Profile</h1>
+        
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <div class="avatar-placeholder" id="avatarPlaceholder">DU</div>
+          </div>
+          <div class="profile-info">
+            <h2 id="profileName">Demo User</h2>
+            <p id="profileEmail">demo@example.com</p>
+            <p id="profileUsername">@demouser</p>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-item">
+            <h3 id="profileTotalTasks">0</h3>
+            <p>Total Tasks</p>
+          </div>
+          <div class="stat-item">
+            <h3 id="profileCompletionRate">0%</h3>
+            <p>Completion Rate</p>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Edit Profile</h3>
+          <form id="editProfileForm">
+            <div class="form-group">
+              <label class="form-label" for="editFullName">Full Name</label>
+              <input type="text" class="form-control" id="editFullName" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editEmail">Email</label>
+              <input type="email" class="form-control" id="editEmail" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editUsername">Username</label>
+              <input type="text" class="form-control" id="editUsername" required>
+            </div>
+            <button type="submit" class="btn btn--primary">Update Profile</button>
+          </form>
+        </div>
+
+        <div class="profile-section">
+          <h3>Change Password</h3>
+          <form id="changePasswordForm">
+            <div class="form-group">
+              <label class="form-label" for="currentPassword">Current Password</label>
+              <input type="password" class="form-control" id="currentPassword" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="newPassword">New Password (8-16 characters)</label>
+              <input type="password" class="form-control" id="newPassword" minlength="8" maxlength="16" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="confirmNewPassword">Confirm New Password</label>
+              <input type="password" class="form-control" id="confirmNewPassword" minlength="8" maxlength="16" required>
+            </div>
+            <button type="submit" class="btn btn--primary">Change Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Page -->
+  <div class="page" id="settingsPage" style="display: none;">
+    <div class="container page-content">
+      <div class="settings-container">
+        <h1 style="margin-bottom: var(--space-32);">Settings</h1>
+        
+        <div class="settings-section">
+          <h3>Appearance</h3>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Dark Mode</h4>
+              <p>Enable dark mode for better viewing at night</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Notifications</h3>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Task Reminders</h4>
+              <p>Get reminders for upcoming tasks</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="taskReminders">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Data Management</h3>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Export Tasks</h4>
+              <p>Download your tasks as a JSON file</p>
+            </div>
+            <button class="btn btn--secondary" id="exportTasksBtn">Export</button>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Clear Completed Tasks</h4>
+              <p>Remove all completed tasks from your list</p>
+            </div>
+            <button class="btn btn--secondary" id="clearCompletedBtn">Clear</button>
+          </div>
+        </div>
+
+        <div class="settings-section danger-zone">
+          <h3>Danger Zone</h3>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Delete Account</h4>
+              <p>Permanently delete your account and all data</p>
+            </div>
+            <button class="btn btn--danger" id="deleteAccountBtn">Delete Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Modal -->
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Add New Task</h2>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId">
+        <div class="form-group">
+          <label class="form-label" for="taskTitle">Title</label>
+          <input type="text" class="form-control" id="taskTitle" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="taskDescription">Description</label>
+          <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+        </div>
+        <div class="date-time-row">
+          <div class="form-group">
+            <label class="form-label" for="taskDueDate">Due Date</label>
+            <input type="date" class="form-control minimal" id="taskDueDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="taskDueTime">Due Time</label>
+            <input type="time" class="form-control minimal" id="taskDueTime">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="taskPriority">Priority</label>
+          <select class="form-control" id="taskPriority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: var(--space-12); justify-content: flex-end; margin-top: var(--space-24);">
+          <button type="button" class="btn btn--secondary" id="cancelTask">Cancel</button>
+          <button type="submit" class="btn btn--primary">Save Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h2 id="confirmTitle">Confirm Action</h2>
+        <button class="modal-close" id="closeConfirmModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmMessage">Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--secondary" id="confirmCancel">Cancel</button>
+        <button class="btn btn--danger" id="confirmAction">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
